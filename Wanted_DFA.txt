@@ -1,0 +1,16 @@
+States:-{q0,q1,q2,q3,q4,q5}
+Alphabets:-{0,1}
+Final States:-{q2,q1,q4}
+Starting State:-q0
+del(q0,0)=q3
+del(q0,1)=q1
+del(q1,1)=q5
+del(q1,0)=q2
+del(q2,0)=q2
+del(q2,1)=q5
+del(q3,0)=q0
+del(q3,1)=q4
+del(q4,1)=q5
+del(q4,0)=q2
+del(q5,1)=q5
+del(q5,0)=q5

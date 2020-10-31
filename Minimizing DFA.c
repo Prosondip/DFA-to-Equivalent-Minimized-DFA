@@ -1,0 +1,700 @@
+#include<stdio.h>
+#include<conio.h>
+#include<math.h>
+#include <stdlib.h>
+#include <string.h>
+#define M 100
+int main()
+{
+FILE *fp;
+char s[M][M],f[M][M],O[M],G[M],K,z[M][M],X[M],Y[M],T[M];
+int a,i,j,b,c,d=1,e,k,p[M][M],g[M],u,v,o,l,k1;
+A:printf("\nEnter a file name [with extension(only .txt file is accepted)] to accept the DFA from the file.\nYour file format should be like below example.\nStates:-{q1,q2,q3,q4,final}\nAlphabets:-{0,1,2,e0,sdf}\nFinal States:-{final,q4}\nStarting State:-q1\nTransition Functions are:-\ndel(q1,e0)=q2\ndel(q3,sdf)=q2\nAnd so on...\nEnter Your File name:-");
+fflush(stdin);
+scanf("%s",&O);
+fp=fopen(O,"r");
+if (fp==NULL)
+{
+    printf( "%s file failed to open.",O);
+    return 0;
+}
+i=0;j=0;
+fflush(stdin);
+K=fgetc(fp);
+while (K!='{' && K!='\n')
+{
+    fflush(stdin);
+    K=fgetc(fp);
+}
+while(K!='\n')
+{
+    fflush(stdin);
+    K=fgetc(fp);
+    j=0;
+    while(K!=',' && K!='}')
+    {
+        s[i][j]=K;
+        j++;
+        fflush(stdin);
+        K=fgetc(fp);
+    }
+    s[i][j]='\0';
+    d=1;
+    for(k=0;k<i;k++)
+    {
+        if(strcmp(s[k],s[i])==0)
+        {
+            d=0;
+            break;
+        }
+    }
+    if(d!=0)
+    {
+        i++;
+    }
+    if(K=='}')
+    {
+        fflush(stdin);
+        K=fgetc(fp);
+    }
+}
+a=i;
+/*
+for(i=0;i<a;i++)
+{
+    printf("\n%s ",s[i]);
+}
+*/
+i=0;j=0;
+fflush(stdin);
+K=fgetc(fp);
+while (K!='{' && K!='\n')
+{
+    fflush(stdin);
+    K=fgetc(fp);
+}
+while(K!='\n')
+{
+    fflush(stdin);
+    K=fgetc(fp);
+    j=0;
+    while(K!=',' && K!='}')
+    {
+        z[i][j]=K;
+        j++;
+        fflush(stdin);
+        K=fgetc(fp);
+    }
+    z[i][j]='\0';
+    d=1;
+    for(k=0;k<i;k++)
+    {
+        if(strcmp(z[k],z[i])==0)
+        {
+            d=0;
+            break;
+        }
+    }
+    if(d!=0)
+    {
+        i++;
+    }
+    if(K=='}')
+    {
+        fflush(stdin);
+        K=fgetc(fp);
+    }
+}
+b=i;
+/*
+for(i=0;i<b;i++)
+{
+    printf("\n%s ",z[i]);
+}
+*/
+i=0;j=0;
+fflush(stdin);
+K=fgetc(fp);
+while (K!='{' && K!='\n')
+{
+    fflush(stdin);
+    K=fgetc(fp);
+}
+while(K!='\n')
+{
+    fflush(stdin);
+    K=fgetc(fp);
+    j=0;
+    while(K!=',' && K!='}')
+    {
+        f[i][j]=K;
+        j++;
+        fflush(stdin);
+        K=fgetc(fp);
+    }
+    f[i][j]='\0';
+    d=1;l=1;
+    for(k=0;k<i;k++)
+    {
+        if(strcmp(f[k],f[i])==0)
+        {
+            d=0;
+            break;
+        }
+    }
+    for(o=0;o<a;o++)
+    {
+        if(strcmp(s[o],f[i])==0)
+        {
+            l=0;
+            break;
+        }
+    }
+    if(d!=0 && l==0)
+    {
+        i++;
+    }
+    if(K=='}')
+    {
+        fflush(stdin);
+        K=fgetc(fp);
+    }
+}
+c=i;
+/*
+for(i=0;i<c;i++)
+{
+    printf("\n%s ",f[i]);
+}
+*/
+int Q[a][b];
+for(k=0;k<a;k++)
+{
+    for(i=0;i<b;i++)
+    {
+        Q[k][i]=-1;
+    }
+}
+fflush(stdin);
+K=fgetc(fp);
+while (K!='-' && K!='\n')
+{
+    fflush(stdin);
+    K=fgetc(fp);
+}
+fflush(stdin);
+K=fgetc(fp);
+i=0;
+while(K!='\n')
+{
+    G[i]=K;
+    i++;
+    fflush(stdin);
+    K=fgetc(fp);
+}
+G[i]='\0';
+d=1;
+for(i=0;i<a;i++)
+{
+    if(strcmp(s[i],G)==0)
+    {
+        d=0;
+        e=i;
+        break;
+    }
+}
+if(d==1)
+{
+    printf("\nWrong format(5).");
+    goto A;
+}
+fflush(stdin);
+K=fgetc(fp);
+while (K!=EOF)
+{
+    while(K!='(')
+    {
+        fflush(stdin);
+        K=fgetc(fp);
+    }
+    i=0;
+    fflush(stdin);
+    K=fgetc(fp);
+    while(K!=',')
+    {
+        T[i]=K;
+        i++;
+        fflush(stdin);
+        K=fgetc(fp);
+    }
+    T[i]='\0';
+    d=1;
+    for(i=0;i<a;i++)
+    {
+        if(strcmp(s[i],T)==0)
+        {
+            d=0;
+            u=i;
+            break;
+        }
+    }
+    if(d!=0)
+    {
+        printf("\nWrong format(4).");
+        goto A;
+    }
+    fflush(stdin);
+    K=fgetc(fp);
+    i=0;
+    while(K!=')')
+    {
+        X[i]=K;
+        i++;
+        fflush(stdin);
+        K=fgetc(fp);
+    }
+    X[i]='\0';
+    d=1;
+    for(i=0;i<b;i++)
+    {
+        if(strcmp(z[i],X)==0)
+        {
+            d=0;
+            v=i;
+            break;
+        }
+    }
+    if(d!=0)
+    {
+        printf("\nWrong Format(3).");
+        goto A;
+    }
+    fflush(stdin);
+    K=fgetc(fp);
+    fflush(stdin);
+    K=fgetc(fp);
+    i=0;
+    while(K!='\n' && K!=EOF)
+    {
+        Y[i]=K;
+        i++;
+        fflush(stdin);
+        K=fgetc(fp);
+    }
+    Y[i]='\0';
+    d=1;
+    for(i=0;i<a;i++)
+    {
+        if(strcmp(s[i],Y)==0)
+        {
+            d=0;
+            if(Q[u][v]>-1)
+            {
+                printf("\nWrong Format (This is not an NFA).");
+                goto A;
+            }
+            Q[u][v]=i;
+            break;
+        }
+    }
+    if(d!=0)
+    {
+        printf("\nWrong Format(2).");
+        goto A;
+    }
+}
+/*
+for(k=0;k<a;k++)
+{
+    for(i=0;i<b;i++)
+    {
+        printf("   %d",Q[k][i]);
+    }
+    printf("\n");
+}
+*/
+if(G[0]=='\0' || s[0][0]=='\0' || z[0][0]=='\0' || f[0][0]=='\0')
+{
+    printf("\nWrong Format(1).");
+    goto A;
+}
+fclose(fp);
+int U[a];
+g[0]=e;
+for(i=1;i<a;i++)
+{
+    g[i]=-1;
+}
+k=1;
+for(i=0;i<k;i++)
+{
+    for(j=0;j<b;j++)
+    {
+        if(Q[(g[i])][j]>-1)
+        {
+            d=0;
+            for(l=0;l<k;l++)
+            {
+                if(Q[(g[i])][j]==g[l])
+                {
+                    d=1;
+                    break;
+                }
+            }
+            if(d==0)
+            {
+                g[k]=Q[(g[i])][j];
+                k++;
+            }
+        }
+    }
+}
+k1=k;
+/*
+for(l=0;l<k1;l++)
+{
+    printf("%d",g[l]);
+}
+*/
+for(k=0;k<a;k++)
+{
+    for(i=0;i<a;i++)
+    {
+        p[k][i]=-1;
+    }
+}
+int ew=0;
+l=0;
+d=0;
+for(j=0;j<k1;j++)
+{
+    d=0;
+    for(i=0;i<c;i++)
+    {
+        if(strcmp(f[i],s[(g[j])])==0)
+        {
+            p[0][ew]=g[j];
+            ew++;
+            d=1;
+            break;
+        }
+    }
+    if(d==0)
+    {
+        p[1][l]=g[j];
+        l++;
+    }
+}
+k=0;
+for(i=0;i<ew;i++)
+{
+    strcpy(f[k],s[(p[0][i])]);
+    k++;
+}
+f[k][0]='\0';
+c=k;
+/*
+for(k=0;k<a;k++)
+{
+    for(i=0;i<a;i++)
+    {
+        printf("%d",p[k][i]);
+    }
+    printf("\n");
+}
+for(i=0;i<c;i++)
+{
+    printf("\n%s ",f[i]);
+}
+*/
+int x,q,w[a][a],I[a],V[a],jp,S[a];
+for(k=0;k<a;k++)
+{
+    for(i=0;i<a;i++)
+    {
+        w[k][i]=p[k][i];
+    }
+}
+l=2;
+q=2;
+for(i=0;i<a;i++)
+{
+    S[i]=-1;
+    U[i]=-1;
+    I[i]=-1;
+    V[i]=-1;
+}
+while(l>0)
+{
+    for(i=0;i<a;i++)
+    {
+        S[i]=w[0][i];
+    }
+    for(k=0;k<a-1;k++)
+    {
+        for(i=0;i<a;i++)
+        {
+            w[k][i]=w[k+1][i];
+        }
+    }
+    /*for(k=0;k<a;k++)
+    {
+        for(i=0;i<a;i++)
+        {
+            printf("   %d",w[k][i]);
+        }
+        printf("\n");
+    }*/
+    l--;
+    for(j=0;j<b;j++)
+    {
+        i=0;
+        ew=0;
+        while(S[i]>-1)
+        {
+            //printf("\n %d,  %d\n",S[i],j);
+            for(k=0;k<k1;k++)
+            {
+                if(Q[(g[k])][j]==S[i])
+                    {
+                        d=0;
+                        U[ew]=g[k];
+                        for(jp=0;jp<ew;jp++)
+                        {
+                            if(U[jp]==U[ew])
+                            {
+                                d=1;
+                                break;
+                            }
+                        }
+                        if(d==0)
+                        {
+                            ew++;
+                        }
+                    }
+            }
+            i++;
+        }
+        for(k=ew;k<a;k++)
+        {
+            U[k]=-1;;
+        }/*
+        for(k=0;k<a;k++)
+        {
+            printf("   %d",U[k]);
+        }*/
+        for(k=0;k<a;k++)
+        {
+            d=0;
+            ew=0;
+            v=0;
+            for(i=0;i<a;i++)
+            {
+                u=0;
+                for(jp=0;jp<a;jp++)
+                {
+                    if(p[k][i]==U[jp] && U[jp]!=-1)
+                    {
+                        I[d]=p[k][i];
+                        d++;
+                        u=1;
+                    }
+                }
+                for(jp=d;jp<a;jp++)
+                {
+                    I[jp]=-1;
+                }
+                if(u==0)
+                {
+                    V[v]=p[k][i];
+                    v++;
+                }
+                for(jp=v;jp<a;jp++)
+                {
+                    V[jp]=-1;
+                }
+                if(p[k][i]>-1)
+                {
+                    ew++;
+                }
+            }
+            if(d!=ew && d!=0)
+            {
+                for(i=0;i<a;i++)
+                {
+                    p[k][i]=I[i];
+                    p[q][i]=V[i];
+                }
+                q++;
+                x=0;
+                for(i=0;i<a;i++)
+                {
+                    if(p[k][0]==w[i][0])
+                    {
+                        for(jp=0;jp<a;jp++)
+                        {
+                            w[i][jp]=I[jp];
+                            w[l][jp]=V[jp];
+                        }
+                        l++;
+                        x=1;
+                    }
+                }
+                if(x==0 && v<=d)
+                {
+                    for(jp=0;jp<a;jp++)
+                    {
+                        w[l][jp]=V[jp];
+                    }
+                    l++;
+                }
+                if(x==0 && d<v)
+                {
+                    for(jp=0;jp<a;jp++)
+                    {
+                        w[l][jp]=I[jp];
+                    }
+                    l++;
+                }
+            }
+        }
+    }
+}
+/*
+for(i=0;i<q;i++)
+{
+    for(j=0;j<a;j++)
+    {
+        printf("     %d",p[i][j]);
+    }
+    printf("\n");
+}
+*/
+printf("\nYour Minimized DFA is:-");
+printf("\nStates:-{");
+for(i=0;i<q;i++)
+{
+    j=0;
+    printf("{");
+    while(p[i][j]>-1)
+    {
+        if(p[i][j+1]!=-1)
+        {
+            printf("%s,",s[(p[i][j])]);
+        }
+        else
+        {
+            printf("%s",s[(p[i][j])]);
+        }
+        j++;
+    }
+    printf("}");
+    if(i!=q-1)
+    {
+        printf(",");
+    }
+}
+printf("}.");
+printf("\nAlphabets:-{");
+for(i=0;i<b-1;i++)
+{
+    printf("%s,",z[i]);
+}
+printf("%s}.",z[i]);
+printf("\nFinal States:-{");
+for(i=0;i<q;i++)
+{
+    j=0;
+    d=0;
+    l=0;
+    while(p[i][d]>-1)
+    {
+        for(k=0;k<c;k++)
+        {
+            if (strcmp(f[k],s[(p[i][d])])==0)
+            {
+                l=1;
+                d=a-1;
+                break;
+            }
+        }
+        d++;
+    }
+    if(l==1)
+    {
+        printf("{");
+        while(p[i][j]>-1)
+        {
+            if(p[i][j+1]!=-1)
+            {
+                printf("%s,",s[(p[i][j])]);
+            }
+            else
+            {
+                printf("%s",s[(p[i][j])]);
+            }
+            j++;
+        }
+        printf("},");
+    }
+}
+printf("\b}.");
+printf("\nStarting State:-%s",G);
+printf("\nTransition Functions are:-");
+for(i=0;i<q;i++)
+{
+    for(j=0;j<b;j++)
+    {
+        d=0;
+        for(k=0;k<q;k++)
+        {
+            l=0;
+            while(p[k][l]!=-1)
+            {
+                if(p[k][l]==Q[(p[i][0])][j])
+                {
+                    d=1;
+                    ew=k;
+                }
+                l++;
+            }
+        }
+        if(d==1)
+        {
+            printf("\ndel(");
+            printf("{");
+            u=0;
+            while(p[i][u]>-1)
+            {
+                if(p[i][u+1]!=-1)
+                {
+                    printf("%s,",s[(p[i][u])]);
+                }
+                else
+                {
+                    printf("%s",s[(p[i][u])]);
+                }
+                u++;
+            }
+            printf("},");
+            printf("%s)={",z[j]);
+            u=0;
+            while(p[ew][u]>-1)
+            {
+                if(p[ew][u+1]!=-1)
+                {
+                    printf("%s,",s[(p[ew][u])]);
+                }
+                else
+                {
+                    printf("%s",s[(p[ew][u])]);
+                }
+                u++;
+            }
+            printf("}");
+        }
+    }
+}
+
+return 0;
+}
